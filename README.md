@@ -4,6 +4,7 @@
 
 작성 규칙
 
+https://help.github.com/categories/writing-on-github/
 언어나 기술명으로 폴더를 만든다. (root에 문서를 만들지 않는다.)
 파일명은 영어로.
 ```
