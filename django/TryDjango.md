@@ -1,4 +1,4 @@
 
 # MVC & MTV
-1.model
--  저장
+1.Model
+ *
