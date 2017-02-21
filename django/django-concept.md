@@ -62,9 +62,9 @@
     - collectstatic - static파일을 한 곳에 모음
 
 
-
-
-
+## node 
+  - pip = npm
+  - requirememts.txt = package.json
  
  
      
