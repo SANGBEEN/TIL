@@ -27,3 +27,51 @@ serializer.data
 serializer = SnippetSerializer(Snippet.objects.all(), many=True)  
 serializer.data 
 ```
+
+##ModelSerializers
+ django에서 Form클래스와 ModelForm클래스를 제공하듯이, rest framework에서도 Serializer클래스와 ModelSerializer클래스를 제공한다.
+
+```
+class UserCreateSerializer(ModelSerializer):
+
+    class Meta:
+        model = MyUser
+        fields = [
+            'email',
+            'password',
+        ]
+```
+ModelSerializer클래스를 사용하면 피드를 자동으로 인식하고 create() 메서드와 update()메서드가 이미 구현되어 있기 때문에 보다 쉽게 시리얼라이저 클래스를 작성 할 수 있다.
+
+##view 만들기
+```
+class UserCreateAPIView(CreateAPIView):
+    """
+    유저 회원가입 API
+    """
+    serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+
+            response_data = {
+                "success": True,
+                "message": "회원 가입이 완료되었습니다."
+            }
+
+            return Response(response_data, status=HTTP_201_CREATED)
+
+```
+
+url 연결
+```
+from django.conf.urls import url
+from users.views import UserCreateAPIView,
+urlpatterns = (
+    url(r'^signup/$', UserCreateAPIView.as_view(), name='signup')
+)
+```
