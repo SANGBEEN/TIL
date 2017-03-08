@@ -1,7 +1,8 @@
 #node.js 기본 모듈
 
-##전역 객체
-process : 애플리케이션 프로세스 실행 정보
+#전역 객체
+##process
+애플리케이션 프로세스 실행 정보
   - env : 애플리케이션 실행 환경
   - arch,platform : CPU와 플랫폼 정보
   - argv : 실행 명령 파라미터
