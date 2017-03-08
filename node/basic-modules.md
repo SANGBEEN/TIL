@@ -40,7 +40,7 @@ for(var I = 1;i<10000;i++){
 }
 console.timeEnd('SUM');
 ```
-#유틸리티
+##유틸리티
 ```
 var util = require('util');
 ```
@@ -62,7 +62,7 @@ var obj2 = new Child();
 obj2.sayHello();
 ```
 
-#이벤트
+##이벤트
 
 이벤트 : 클라이언트의 접속 요청, 소켓에 데이터 도착, 파일 오픈/읽기 완료....
 이벤트 처리 : 비동기 처리, 리스너 함수
