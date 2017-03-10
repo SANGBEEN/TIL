@@ -1,6 +1,5 @@
 #node.js 기본 모듈
 
-#전역 객체
 ##process
 애플리케이션 프로세스 실행 정보
   - env : 애플리케이션 실행 환경
@@ -69,7 +68,7 @@ obj2.sayHello();
 이벤트 처리 : 비동기 처리, 리스너 함수
 
 이벤트 리스너 함수 등록
-  - emitter.addListener(event, listener) 
+  - emitter.addListener(event, listener)
   - emitter.on(event, listener) : 이벤트가 발생할 때마다 발생. 주로 사용
   - emitter.once(evnet, listener) : 이벤트가 발생했을 때 단 한번만 발생
 ```
@@ -81,7 +80,7 @@ process.on('exit', function(){
   - emitter.removeListener(evnet, listener)
   - emitter.removeAllListeners([event])
 이벤트 발생
-  - emitter.emit(event[,arg1][,arg2][,```])
+  - emitter.emit(event[,arg1][,arg2][,])
   - event(이벤트 이름), arg(리스너 함수의 파라미너)
   - emit 함수 호출 결과 : true, fasle
 
@@ -119,7 +118,9 @@ var path = require('path');
 
 경로 정보
   - 전역 객체 : __filename, __dirname
-  - var path = __dirname+'./image.jpg';
+```
+var path = __dirname+'./image.jpg';
+```
 경로 다듬기 : path.normalize()
 경로 구성 요소 얻기
 ```
@@ -145,7 +146,7 @@ info.name
 경로 만들기
   - path.seq : 연산
   - path.join : 붙이기
-  - path.format 
+  - path.format
 
 ##파일 시스템 - fs 모듈
 파일 생성/읽기/쓰기/삭제, 파일 접근성/속성, 디렉토리 생성/읽기/삭제, 파일 스트림
@@ -164,7 +165,7 @@ var fs = require('fs')
   - 경로 : fs.readFile(filename[,options], callback)
 
 파일 디스크립터
-``` 
+```
 //FileDescription 얻기 : open함수
 //flag r(읽기),w(쓰기),a(추가)...
 fs.open(path, flags[,mode], function(err,fd){
@@ -211,4 +212,62 @@ fs.writeFile('./textData.txt', 'helloworld', function(err){
 ##버퍼
 자바스크립트는 바이너리 데이터를 다루는 기능이 없으므로 Buffer 모듈을 사용함
   - 파일에서 읽기 : var fileBuffer = fs.readFilesync('image.jpg');
-  - 네트워크에서 얻기 
+  - 네트워크에서 얻기
+
+##스트림
+파일 스트림에서 읽기
+```
+var is = fs.createReadStream(file);
+is.on('readable', function(){
+  console.log('==READABLE EVENT');
+  });
+is.on('data', function(chunk){
+  console.log('==DATA EVENT');
+  console.log(chunk.toString());
+  });
+is.on('end', function(){
+  console.log('==END EVENT');
+  });
+```
+출력 스트림에 쓰기
+```
+var os = fs.createWriteStream('output.txt');
+os.on('finish', function(){
+  console.log('==FINISH EVENT');
+  });
+os.write('1234\n');
+os.write('5678\n');
+os.end('9\n');
+```
+스트림 연결/해제
+  - readable.pipe(destination[,options])
+  - readable.unpipe([destination])
+
+##클러스터
+여러 시스템을 하나로 묶어서 사용하는 기술
+Node.js는 싱글 쓰레드이므로 멀티 코어 시스템의 장점을 살리기 위해 클러스터를 사용
+
+클러스터의 이벤트
+  - fork : 워커 생성
+  - online : 워커 생성 후 동작
+  - listening : 워커에 작성한 서버의 listen이벤트
+  - disconnect : 워커 연결 종료
+  - exit : 워커 프로세스 종료
+워커의 이벤트
+  - message : 메세지 이벤트
+  - disconnect : 워커 연결 종료
+데이터 전달
+```
+//마스터가 워커에게
+worker.send(data)
+//워커의 데이터 이벤트
+worker.on('message', function(data){
+});
+//워커가 마스터에게
+process.send(data)
+//마스터의 데이터 이벤트
+var worker = cluster.fork();
+worker.on('message',function(){
+});
+```
+마스터와 워커 분리 - cluster.setupMaster([settings])
